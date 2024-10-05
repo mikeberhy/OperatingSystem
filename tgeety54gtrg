@@ -1,0 +1,81 @@
+import os
+
+class SimpleOneOS:
+    def __init__(self):
+        print("Welcome to SimpleOneOS! You can only create and manage .txt files here. Type 'help' for a list of commands.")
+
+    def create_txt_file(self, filename):
+        if not filename.endswith('.txt'):
+            filename += '.txt'
+        with open(filename, 'w') as f:
+            f.write("")  # Create an empty file
+        print(f"Text file '{filename}' created successfully.")
+
+    def write_txt_file(self, filename, content):
+        if not filename.endswith('.txt'):
+            filename += '.txt'
+        with open(filename, 'a') as f:
+            f.write(content + '\n')
+        print(f"Content added to '{filename}'.")
+
+    def view_txt_file(self, filename):
+        if not filename.endswith('.txt'):
+            filename += '.txt'
+        try:
+            with open(filename, 'r') as f:
+                print(f.read())
+        except FileNotFoundError:
+            print(f"File '{filename}' not found.")
+
+    def list_txt_files(self):
+        txt_files = [f for f in os.listdir('.') if f.endswith('.txt')]
+        if txt_files:
+            print("Text files in the current directory:")
+            for file in txt_files:
+                print(file)
+        else:
+            print("No .txt files found.")
+
+    def run(self):
+        while True:
+            command = input("SimpleOneOS> ").strip().split()
+            if len(command) == 0:
+                continue
+            if command[0].lower() == 'exit':
+                print("Exiting SimpleOneOS. Goodbye!")
+                break
+            elif command[0].lower() == 'help':
+                self.show_help()
+            elif command[0].lower() == 'createtxt':
+                if len(command) > 1:
+                    self.create_txt_file(command[1])
+                else:
+                    print("Usage: createtxt <filename>")
+            elif command[0].lower() == 'writetxt':
+                if len(command) > 2:
+                    self.write_txt_file(command[1], " ".join(command[2:]))
+                else:
+                    print("Usage: writetxt <filename> <content>")
+            elif command[0].lower() == 'viewtxt':
+                if len(command) > 1:
+                    self.view_txt_file(command[1])
+                else:
+                    print("Usage: viewtxt <filename>")
+            elif command[0].lower() == 'listtxt':
+                self.list_txt_files()
+            else:
+                print(f"Unknown command: {command[0]}")
+
+    def show_help(self):
+        print("""
+        Available commands:
+        createtxt <filename>        - Create a new empty .txt file
+        writetxt <filename> <content> - Write content to a .txt file
+        viewtxt <filename>          - View the content of a .txt file
+        listtxt                     - List all .txt files in the current directory
+        exit                        - Exit the OS
+        """)
+
+if __name__ == '__main__':
+    os_shell = SimpleOneOS()
+    os_shell.run()
